@@ -1,0 +1,95 @@
+User:
+    id -> primary key
+    username
+    email
+    hashed_password
+    relation user -> project
+Project
+    id -> primary key
+    project name
+    user_id -> forien key
+    description
+    relation project -> user
+    relation project -> task
+Task
+    id -> primary key
+    title
+    description
+    status
+    project_id -> forien key
+    relation task -> project
+
+end points:
+
+Authentication
+POST /register
+POST /login
+GET  /me
+
+Projects
+POST   /projects
+GET    /projects
+GET    /projects/{project_id}
+PUT    /projects/{project_id}
+DELETE /projects/{project_id}
+
+Tasks
+GET    /projects/{project_id}/tasks
+POST   /projects/{project_id}/tasks
+GET    /projects/{project_id}/tasks/{task_id}
+PUT    /projects/{project_id}/tasks/{task_id}
+DELETE /projects/{project_id}/tasks/{task_id}
+
+Filtering
+GET /projects/{project_id}/tasks?status={status}
+
+
+
+
+TaskFlow/
+├── src/
+│   └── app/
+│       ├── app.py
+│       ├── db.py
+│       ├── models.py
+│       ├── schemas.py
+│       ├── auth.py
+│       └── routers/
+│           ├── users.py
+│           ├── projects.py
+│           └── tasks.py
+│
+├── main.py
+├── pyproject.toml
+├── README.md
+└── .gitignore
+
+
+Roles:
+user
+admin
+
+Permissions:
+user:
+    project:
+        create
+        update_own
+        delete_own
+        read_own
+    task:
+        create
+        update_own
+        delete_own
+        read_own
+
+admin:
+    project:
+        create
+        update_any
+        delete_any
+        read_any
+    task:
+        create
+        update_any
+        delete_any
+        read_any
