@@ -8,6 +8,8 @@ from ..schemas import RegisterUser, ResponseUser
 from ..db import get_async_session
 from ..auth import hash_password, verify_password, create_access_token, get_current_user
 
+import logging
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 @router.post(
@@ -37,6 +39,8 @@ async def register(
     await session.commit()
     await session.refresh(user)
 
+    logger.info("User registration completed")
+
     return user
 
 @router.post("/login")
@@ -51,6 +55,7 @@ async def log_in(
     existing_user = result.scalar_one_or_none()
 
     if existing_user is None:
+        logger.warning("Failed login attempt")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
@@ -62,6 +67,7 @@ async def log_in(
     )
 
     if not password_is_valid:
+        logger.warning("Failed login attempt")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
@@ -70,6 +76,8 @@ async def log_in(
     token = create_access_token(
         {"sub": str(existing_user.id)}
     )
+
+    logger.info("User logged in successfully")
 
     return {
         "access_token": token,
