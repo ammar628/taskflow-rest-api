@@ -6,12 +6,10 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 from typing import AsyncGenerator
-import os
-from dotenv import load_dotenv, find_dotenv
 
-load_dotenv(find_dotenv())
+from src.app.config import DATABASE_URL
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = DATABASE_URL
 
 engine = create_async_engine(DATABASE_URL)
 

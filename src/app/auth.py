@@ -10,12 +10,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .db import get_async_session
 from .models import User
 from .schemas import RolesUser
-import os
-from dotenv import load_dotenv, find_dotenv
 
+from src.app.config import JWT_SECRET
 
-load_dotenv(find_dotenv())
-SECRET_KEY = os.getenv("SECRET_KEY")
+JWT_SECRET = JWT_SECRET
 
 
 #password start
@@ -49,7 +47,7 @@ def create_access_token(data: dict) -> str:
 
     token = jwt.encode(
         to_encode,
-        SECRET_KEY,
+        JWT_SECRET,
         algorithm=ALGORITHM
     )
 
@@ -61,7 +59,7 @@ def decode_access_token(token: str):
     try:
         payload = jwt.decode(
         token,
-        SECRET_KEY,
+        JWT_SECRET,
         algorithms=[ALGORITHM]
         )
     except JWTError:
